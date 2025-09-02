@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+# Sitemap removed (no blog). Update when you add one: Sitemap: https://suganworks.github.io/sitemap.xml

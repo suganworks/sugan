@@ -1,0 +1,40 @@
+---
+import type { Project } from '../data/projects';
+import { brandColors } from '../data/brandColors';
+const { project, index = 0 } = Astro.props as { project: Project; index?: number };
+---
+<article class="featured-card" style={`--i:${index}`}> 
+  <div class="featured-card__inner">
+    <header class="featured-head">
+      <h3>{project.title}</h3>
+      {project.repo && <a class="repo-link" href={project.repo} target="_blank" rel="noopener" aria-label={`Source code: ${project.title}`}>↗</a>}
+    </header>
+    <p class="featured-desc">{project.desc}</p>
+    {project.metrics && <p class="featured-metrics">{project.metrics}</p>}
+    <div class="featured-tech">
+      {project.tech.map((t,i)=>{
+        const c = (brandColors as any)[t] || '#666';
+        return <span class="tech-chip" style={`--chip:${c};--d:${i*60}ms`}>{t}</span>;
+      })}
+    </div>
+  </div>
+</article>
+<style is:global>
+  .featured-projects { display:grid; gap:var(--space-5); margin-bottom:var(--space-6); }
+  .featured-card { position:relative; z-index:2; /* ensure spheres stay behind like other sections */ border-radius:34px; overflow:hidden; background:linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); padding:clamp(1.5rem,2.5vw,2.75rem); backdrop-filter:blur(22px) saturate(170%); -webkit-backdrop-filter:blur(22px) saturate(170%); border:1px solid rgba(255,255,255,.18); box-shadow:0 10px 40px -12px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.05) inset; animation:featIn .9s cubic-bezier(.25,.6,.3,1) forwards; opacity:0; transform:translateY(50px) scale(.96); }
+  .featured-card:before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 18% 22%, rgba(255,255,255,.22), rgba(255,255,255,0) 60%), radial-gradient(circle at 82% 75%, rgba(255,255,255,.14), rgba(255,255,255,0) 70%); mix-blend-mode:overlay; pointer-events:none; }
+  .featured-card__inner { position:relative; z-index:2; }
+  .featured-head { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+  .featured-head h3 { margin:0 0 .85rem; font-size:clamp(1.6rem,1.2rem + 1.2vw,2.4rem); line-height:1.15; font-weight:700; letter-spacing:.5px; color:var(--c-primary); }
+  /* Optional subtle gradient only in dark theme (text clipped) */
+  [data-theme='dark'] .featured-head h3 { background:linear-gradient(120deg,var(--c-primary),#fff); -webkit-background-clip:text; color:transparent; }
+  .featured-desc { font-size:var(--fs-1); line-height:1.55; margin:.85rem 0 .5rem; }
+  .featured-metrics { margin:0 0 .85rem; font-size:var(--fs-0); letter-spacing:.7px; text-transform:uppercase; opacity:.75; }
+  .featured-tech { display:flex; flex-wrap:wrap; gap:.55rem; }
+  .featured-card:hover { box-shadow:0 14px 46px -10px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.15) inset; transform:translateY(-6px) scale(1.01); }
+  .featured-card:hover .featured-head h3 { filter:drop-shadow(0 0 8px rgba(255,255,255,.25)); }
+  @keyframes featIn { to { opacity:1; transform:none; } }
+  [data-theme='light'] .featured-card { background:linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.015)); border-color:rgba(0,0,0,.15); }
+  [data-theme='light'] .featured-head h3 { background:none; color:#111; -webkit-background-clip:initial; }
+  @media (max-width:760px){ .featured-projects { gap:var(--space-4); } .featured-card { padding:1.75rem 1.4rem 2rem; } }
+</style>

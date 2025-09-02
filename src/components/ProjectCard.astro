@@ -1,0 +1,30 @@
+---
+import type { Project } from '../data/projects';
+import { brandColors } from '../data/brandColors';
+const { project } = Astro.props as { project: Project };
+---
+<article class={`timeline-entry project-entry ${project.featured ? 'featured' : ''}`} style="z-index:2;">
+  <h3 class="timeline-co type-primary project-title">
+    {project.title}
+    {project.repo && <a class="repo-link" href={project.repo} target="_blank" rel="noopener" aria-label={`Source code: ${project.title}`}>↗</a>}
+  </h3>
+  <div class="timeline-description">
+    <p class="project-desc">{project.desc}</p>
+    {project.metrics && <p class="project-metrics">{project.metrics}</p>}
+    <div class="project-tech">
+      {project.tech.map((t,i) => {
+        const c = (brandColors as any)[t] || '#555';
+        return <span class="tech-chip" style={`--chip:${c};--d:${i*70}ms`}>{t}</span>;
+      })}
+    </div>
+  </div>
+</article>
+<style is:global>
+  .project-entry.featured { border:1px solid rgba(255,255,255,.18); background:linear-gradient(140deg, rgba(255,255,255,.09), rgba(255,255,255,.02)); }
+  [data-theme='light'] .project-entry.featured { border-color:rgba(0,0,0,.18); background:linear-gradient(140deg, rgba(0,0,0,.08), rgba(0,0,0,.015)); }
+  .project-metrics { font-size:var(--fs-0); letter-spacing:.5px; opacity:.75; margin:.4rem 0 .2rem; text-transform:uppercase; }
+  /* spacing tweaks */
+  .project-title { margin:0 0 .85rem; }
+  .project-desc { margin-top:.2rem; }
+  .project-metrics + .project-tech { margin-top:.45rem; }
+</style>

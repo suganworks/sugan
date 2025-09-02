@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+const base = import.meta.env.BASE_URL; // '/sugan/' in production
+import { skills } from '../data/skills';
+import { brandColors } from '../data/brandColors';
+import { projects } from '../data/projects';
+import ProjectCard from '../components/ProjectCard.astro';
+import SkillIcon from '../components/SkillIcon.astro';
+import FeaturedProjectCard from '../components/FeaturedProjectCard.astro';
+
+const contact = [
+    { label: 'Email', value: 'suganthan04@gmail.com', href: 'mailto:suganthan04@gmail.com' },
+    { label: 'GitHub', value: 'suganworks', href: 'https://github.com/suganworks' },
+    { label: 'LinkedIn', value: 'Suganthan Prabhakaran', href: 'https://www.linkedin.com/in/suganthan-prabhakaran' },
+    { label: 'Phone', value: '+91 9791471356' }
+];
+---
+<BaseLayout>
+    <div class="canvas-container"></div>
+    <div class="hero-spacer" aria-hidden="true"></div>
+    <!-- Removed tagline and contact button as requested -->
+
+            <!-- About (header centered with glow, fades in below hero) -->
+            <section id="about" class="about-timeline about-offset">
+                <header class="timeline-entry timeline-header">
+                    <h2 class="timeline-co type-header">About</h2>
+                </header>
+                <article class="timeline-entry">
+                    <div class="timeline-description">
+                        <div class="about-text">
+                            <p>I am Suganthan, a driven and self-motivated software development enthusiast with a background in Electronics and Communication Engineering. I'm passionate about building innovative software solutions and have a solid foundation in core concepts like Data Structures and Algorithms (DSA) and Object-Oriented Programming (OOP).</p>
+                            <p>My experience includes working as a Software Development Trainer Intern at Qbitio Technologies, where I mentored over 30 students in Java and DSA fundamentals. I focused on helping students solve coding challenges and taught optimization techniques, including time and space complexity analysis.</p>
+                            <p>I'm a continual learner and have earned certifications in Cloud Computing and Java Programming through NPTEL. My achievements also include winning first prizes at multiple technical events and hackathons, such as the Aavishkaar’24 Project Exhibition and the Internal Smart India Hackathon (SIH) 2024. These experiences have helped me develop strong problem-solving and communication skills.</p>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- section divider removed -->
+
+                    <!-- Skills -->
+                    <section id="skills" class="skills-timeline">
+                        <header class="timeline-entry timeline-header">
+                            <h2 class="timeline-co type-header">Skills</h2>
+                        </header>
+                        {Object.entries({
+                            Languages: skills.languages,
+                            'Web Development': skills.web,
+                            'Frameworks & Tools': skills.frameworks,
+                            'Core Concepts': skills.concepts,
+                            'Soft Skills': skills.soft
+                        }).map(([group, list]) => {
+                            const fileMap = {
+                                'Java':'java','Python':'python','MySQL':'mysql','PostgreSQL':'postgresql','HTML':'html','CSS':'css','JavaScript':'javascript','React.js':'react','Spring Boot':'spring','Node.js':'node-js','Tailwind CSS':'tailwind-css','Cloud Computing':'cloud'
+                            };
+                            return (
+                            <article class="timeline-entry">
+                                <h3 class="timeline-co type-primary">{group}</h3>
+                                <div class="timeline-description icon-row">
+                                    {list.map(item => <SkillIcon name={item} />)}
+                                </div>
+                            </article>
+                            );
+                        })}
+                    </section>
+
+            <!-- section divider removed -->
+
+            <!-- Projects -->
+            <section id="projects" class="projects-timeline">
+                <header class="timeline-entry timeline-header">
+                    <h2 class="timeline-co type-header">Projects</h2>
+                </header>
+                <div class="featured-projects">
+                    {projects.filter(p=>p.featured).map((p,i)=>(<FeaturedProjectCard project={p} index={i} />))}
+                </div>
+                {projects.filter(p=>!p.featured).map(p => <ProjectCard project={p} />)}
+            </section>
+
+            <!-- section divider removed -->
+
+            <!-- Connect -->
+            <section id="connect" class="connect-timeline">
+                <header class="timeline-entry timeline-header">
+                    <h2 class="timeline-co type-header">Connect</h2>
+                </header>
+                <article class="timeline-entry">
+                    <h3 class="timeline-co type-primary">Say Hello</h3>
+                    <div class="timeline-description contact-grid">
+                        {contact.map(item => (
+                            <p><strong>{item.label}:</strong> {item.href ? <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined}>{item.value}</a> : item.value}</p>
+                        ))}
+                    </div>
+                </article>
+                <article class="timeline-entry">
+                    <h3 class="timeline-co type-primary">Resume</h3>
+                    <div class="timeline-description">
+                        <p>Download my latest resume for a concise overview of skills, projects and experience.</p>
+                        <p style="margin-top:1rem;"><a href={`${base}Suganthan_Resume.pdf`} class="btn-solid" download>Download PDF</a></p>
+                    </div>
+                </article>
+            </section>
+
+        <script src="../client/main.ts"></script>
+        <script is:inline>
+            // Fade / slide in timeline entries
+            const entryObserver = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('visible'); entryObserver.unobserve(e.target);} });
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.timeline-entry').forEach(el => entryObserver.observe(el));
+
+            // Scrollspy for sticky nav
+            const navLinks = [...document.querySelectorAll('.sticky-nav a')];
+            const sections = navLinks.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+            const spy = new IntersectionObserver((ents)=>{
+                ents.forEach(ent => {
+                    if(ent.isIntersecting){
+                        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + ent.target.id));
+                    }
+                });
+            }, { rootMargin:'-55% 0px -40% 0px', threshold:[0,1] });
+            sections.forEach(s => spy.observe(s));
+
+            // Smooth scroll behavior
+            navLinks.forEach(a => a.addEventListener('click', e => { e.preventDefault(); const id = a.getAttribute('href'); const el = document.querySelector(id); if(el){ window.scrollTo({ top: el.offsetTop - 20, behavior:'smooth'}); }}));
+
+            // In-view highlight for section headers
+            const headerObserver = new IntersectionObserver((ents)=>{
+                ents.forEach(ent => ent.target.classList.toggle('in-view', ent.isIntersecting));
+            }, { rootMargin: '-50% 0px -45% 0px' });
+            document.querySelectorAll('.timeline-header').forEach(h => headerObserver.observe(h));
+
+            // Scroll progress bar
+            const prog = document.createElement('div');
+            prog.className = 'scroll-progress';
+            document.body.appendChild(prog);
+            const onScroll = () => {
+                const sc = window.scrollY;
+                const h = document.documentElement.scrollHeight - window.innerHeight;
+                prog.style.setProperty('--p', (sc / h));
+            };
+            window.addEventListener('scroll', onScroll, { passive:true });
+            onScroll();
+        </script>
+        <style is:global>
+            .hero-spacer { height:50vh; }
+            /* Removed .hero-meta, .tagline, .hero-ctas styles after content removal */
+            .btn-solid, .btn-ghost { position:relative; display:inline-flex; align-items:center; gap:.4rem; font-size:.7rem; letter-spacing:.7px; text-transform:uppercase; padding:.75rem 1.15rem; border-radius:999px; font-weight:600; text-decoration:none; overflow:hidden; backdrop-filter:blur(8px) saturate(160%); -webkit-backdrop-filter:blur(8px) saturate(160%); transition:background .35s, color .35s, box-shadow .35s, transform .3s; }
+            .btn-solid { background:var(--c-primary); color:#111; box-shadow:0 6px 18px -6px rgba(0,0,0,.6); }
+            .btn-solid:hover { box-shadow:0 8px 22px -6px rgba(0,0,0,.65); transform:translateY(-3px); }
+            .btn-ghost { background:rgba(255,255,255,.12); color:var(--c-primary); border:1px solid rgba(255,255,255,.2); }
+            .btn-ghost:hover { background:var(--c-primary); color:#111; transform:translateY(-3px); }
+            /* Removed mobile adjustments for .hero-meta */
+            .timeline-entry { opacity:0; transform:translateY(46px) scale(.97); filter:blur(14px); transition:opacity .85s cubic-bezier(.25,.6,.3,1), transform .85s cubic-bezier(.25,.6,.3,1), filter .85s; }
+            .timeline-entry.visible { opacity:1; transform:none; filter:none; }
+            .timeline-entry.visible:nth-of-type(1){ transition-delay:.05s; }
+            .timeline-entry.visible:nth-of-type(2){ transition-delay:.1s; }
+            .timeline-entry.visible:nth-of-type(3){ transition-delay:.15s; }
+            @media (prefers-reduced-motion:reduce){ .timeline-entry{ filter:none !important; } }
+            .icon-row { --icon-size:86px; display:grid; gap:1.1rem; grid-template-columns:repeat(auto-fill,minmax(var(--icon-size),1fr)); }
+            .skill-icon { aspect-ratio:1/1; width:100%; border:1px solid rgba(255,255,255,.12); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; background:radial-gradient(circle at 35% 25%, rgba(255,255,255,.10), rgba(255,255,255,.03)); backdrop-filter:blur(8px) saturate(160%); -webkit-backdrop-filter:blur(8px) saturate(160%); transition:transform .4s, border-color .4s, background .4s; overflow:hidden; }
+            .skill-icon:after { content:""; position:absolute; inset:0; background:linear-gradient(140deg, rgba(255,255,255,.25), rgba(255,255,255,0) 45%); opacity:.10; pointer-events:none; }
+            .skill-icon img { width:40px; height:40px; object-fit:contain; filter:grayscale(.72) brightness(.85); transition:filter .45s, transform .45s; }
+            .skill-icon:hover { transform:translateY(-6px); border-color:var(--brand); background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.16), rgba(255,255,255,.05)); }
+            .skill-icon:hover img { filter:none drop-shadow(0 0 10px var(--brand)); transform:scale(1.12) rotate(-4deg); }
+            .skill-icon:active { transform:translateY(-2px) scale(.95); }
+            .icon-label { margin-top:.45rem; font-size:.55rem; letter-spacing:1px; opacity:.8; text-transform:uppercase; }
+            .badge { display:inline-block; background:linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.05)); padding:.45rem .85rem; border-radius:1.5rem; font-size:.7rem; letter-spacing:.5px; backdrop-filter:blur(6px) saturate(160%); border:1px solid rgba(255,255,255,.09); margin:.2rem .4rem .2rem 0; }
+            .badge.small { font-size:.68rem; }
+            .sticky-nav a { position:relative; }
+            .sticky-nav a.active { background:var(--c-primary); color:#111; }
+            .sticky-nav a:not(.active)::after { content:""; position:absolute; left:50%; bottom:4px; width:0; height:2px; background:var(--c-primary); border-radius:2px; transform:translateX(-50%); transition:width .3s; }
+            .sticky-nav a:hover:not(.active)::after { width:60%; }
+            /* Projects */
+            .project-entry { --project-bg: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); background: var(--project-bg); }
+            .project-desc { font-size:1rem; line-height:1.5; margin:0; }
+            .project-tech { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
+            .tech-chip { background:var(--chip); color:#111; padding:.45rem .75rem; font-size:.63rem; font-weight:600; letter-spacing:.6px; border-radius:999px; line-height:1; position:relative; isolation:isolate; box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 4px 10px -2px rgba(0,0,0,.6); opacity:0; transform:translateY(8px) scale(.92); animation:chipIn .55s var(--d,0ms) cubic-bezier(.4,.1,.2,1) forwards; }
+            .tech-chip:before { content:""; position:absolute; inset:0; background:linear-gradient(140deg, rgba(255,255,255,.55), rgba(255,255,255,0) 55%); opacity:.18; mix-blend-mode:overlay; border-radius:inherit; }
+            .tech-chip:hover { filter:brightness(1.08) contrast(1.05); box-shadow:0 0 0 1px rgba(255,255,255,.15), 0 6px 14px -4px rgba(0,0,0,.65); }
+            .project-title { display:flex; align-items:center; gap:.6rem; }
+            .repo-link { display:inline-flex; align-items:center; justify-content:center; width:1.65rem; height:1.65rem; border-radius:50%; font-size:.9rem; text-decoration:none; background:rgba(255,255,255,.1); color:var(--c-primary); transition:background .3s, transform .3s; position:relative; }
+            .repo-link:hover { background:var(--c-primary); color:#111; transform:translateY(-2px); }
+            @keyframes chipIn { to { opacity:1; transform:none; } }
+            /* Section divider */
+            /* section-divider styles removed */
+            .about-text { text-align:center; display:flex; flex-direction:column; gap:1.1rem; }
+            .about-text p { margin:0; }
+            .about-offset { margin-top:32vh; }
+            @media (max-height:780px){ .about-offset{ margin-top:26vh; } }
+            @media (max-width:640px){ .about-offset{ margin-top:38vh; } }
+            .about-text p { line-height:1.6; }
+            @media (prefers-reduced-motion:reduce){ .timeline-entry{ transition:none; transform:none !important; opacity:1 !important; } }
+            .timeline-header { position:relative; overflow:hidden; transition: box-shadow .6s ease, background .8s ease; }
+            .timeline-header:before { content:""; position:absolute; inset:0; background:linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.4) 45%, rgba(255,255,255,0) 60%); transform:translateX(-120%); }
+            .timeline-header.in-view:before { animation:shimmer 2.6s cubic-bezier(.55,.2,.35,1) .3s forwards; }
+            .timeline-header.in-view { box-shadow:0 0 0 1px rgba(255,255,255,.25), 0 0 38px -6px var(--c-primary), 0 0 120px -40px var(--c-primary); background:linear-gradient(135deg, rgba(255,255,255,.11), rgba(255,255,255,.025)); }
+            @keyframes shimmer { to { transform:translateX(120%); } }
+            .scroll-progress { position:fixed; left:0; top:0; height:4px; width:100%; background:linear-gradient(90deg, var(--c-primary) calc(var(--p)*100%), rgba(255,255,255,.08) 0); z-index:500; mix-blend-mode:screen; }
+            @media (max-width:640px){ .scroll-progress{ height:3px; } }
+            @media (max-width:640px){ .project-desc { font-size:.95rem; } .tech-chip { font-size:.58rem; } }
+            @media (max-width:860px){ .icon-row{ --icon-size:78px; } }
+            @media (max-width:640px){ .icon-row{ --icon-size:64px; gap:.85rem; } .hero-sub{ max-width:100%; } }
+        </style>
+</BaseLayout>

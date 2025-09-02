@@ -1,0 +1,115 @@
+---
+import Header from './Header.astro';
+import { projects } from '../data/projects';
+
+// Base path for GitHub Project Pages so that absolute-like assets work when deployed under /sugan
+const base = import.meta.env.BASE_URL; // typically '/sugan/'
+
+interface Props {
+  title?: string;
+  description?: string;
+  headerVariant?: 'default' | 'small';
+}
+
+const {
+    title = "Suganthan | Software Engineer",
+    description = "Portfolio of Suganthan – aspiring software engineer focusing on Java, Spring Boot, React, Node.js and scalable backend systems.",
+    headerVariant = 'default'
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content={description} />
+    <meta name="author" content="Suganthan" />
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://suganworks.github.io${base}`.replace(/\/$/, '')} />
+    <meta property="og:image" content={`${base}favicon.ico`} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${base}favicon.ico" />} />
+    <!-- Removed canonical + rss (add later if needed) -->
+    <script is:inline>document.documentElement.classList.remove('no-js');</script>
+    <link rel="stylesheet" href={`${base}global.css`} />
+</head>
+<body>
+    <a href="#about" class="skip-link">Skip to content</a>
+    <main>
+        <Header variant={headerVariant} />
+        <nav class="sticky-nav" aria-label="Section navigation">
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#connect">Connect</a>
+            <button id="themeToggle" type="button" class="theme-toggle" aria-label="Switch theme">🌙</button>
+        </nav>
+        <slot />
+        <footer>
+            <div class="footer-content">
+                <p>Connect: <a href="mailto:suganthan04@gmail.com">Email</a> · <a href="https://github.com/suganworks" target="_blank">GitHub</a> · <a href="https://www.linkedin.com/in/suganthan-prabhakaran" target="_blank">LinkedIn</a></p>
+            </div>
+        </footer>
+    </main>
+    <!-- Analytics removed for personalization -->
+    <script type="application/ld+json" is:inline>{JSON.stringify({
+        '@context':'https://schema.org',
+        '@type':'Person',
+        name:'Suganthan',
+    url:`https://suganworks.github.io${base}`,
+        jobTitle:'Software Engineer',
+        sameAs:[
+            'https://github.com/suganworks',
+            'https://www.linkedin.com/in/suganthan-prabhakaran'
+        ],
+        knowsAbout:['Java','Spring Boot','React','Node.js','DSA','Cloud Computing'],
+        worksOn: projects.map(p => ({ '@type':'CreativeWork', name:p.title, description:p.desc, url:p.repo }))
+    })}</script>
+    <script is:inline>
+        (function(){
+            const KEY='theme';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const saved = localStorage.getItem(KEY);
+            const initial = saved || (prefersDark ? 'dark' : 'dark'); // default dark
+            document.documentElement.dataset.theme = initial;
+            const btn = document.getElementById('themeToggle');
+            function update(){
+                const t = document.documentElement.dataset.theme;
+                if(btn){
+                    btn.textContent = t==='dark' ? '☀' : '🌙';
+                    btn.setAttribute('aria-label', t==='dark' ? 'Switch to light theme' : 'Switch to dark theme');
+                }
+            }
+            btn?.addEventListener('click', ()=>{
+                const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem(KEY, next);
+                update();
+            });
+            update();
+        })();
+    </script>
+    <style is:global>
+        .theme-toggle { cursor:pointer; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.08); color:var(--c-primary); width:2.05rem; height:2.05rem; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; font-size:.9rem; line-height:1; padding:0; transition:background .35s, transform .35s, color .35s; }
+        .theme-toggle:hover { background:var(--c-primary); color:#111; transform:translateY(-3px); }
+        [data-theme='light'] .theme-toggle:hover { color:#222; }
+        .theme-toggle:focus-visible { outline:2px solid var(--c-primary); outline-offset:2px; }
+        @media (max-width:560px){ .theme-toggle{ width:1.85rem; height:1.85rem; font-size:.8rem; } }
+    </style>
+    <script is:inline>
+        // Add aria-current to active nav link after scrollspy sets class
+        const navLinks = document.querySelectorAll('.sticky-nav a');
+        const setAria = () => navLinks.forEach(l => l.getAttribute('class')?.includes('active') ? l.setAttribute('aria-current','true') : l.removeAttribute('aria-current'));
+        const obs = new MutationObserver(setAria);
+        navLinks.forEach(l => obs.observe(l,{ attributes:true, attributeFilter:['class'] }));
+        setAria();
+    </script>
+</body>
+</html>

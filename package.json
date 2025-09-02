@@ -1,0 +1,24 @@
+{
+  "name": "sugan_portfolio",
+  "version": "1.0.0",
+  "description": "Suganthan portfolio site.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vite": "^5.4.7",
+    "vite-plugin-glsl": "^1.3.0",
+    "vite-plugin-static-copy": "^1.0.6"
+  },
+  "dependencies": {
+    "@astrojs/rss": "4.0.12",
+    "astro": "^5.2.5",
+    "three": "^0.112.0"
+  }
+}

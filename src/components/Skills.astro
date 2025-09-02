@@ -1,0 +1,21 @@
+---
+// Skills data
+const languages = ["Java", "Python", "MySQL", "PL/SQL"];
+const webDev = ["HTML", "CSS", "JavaScript"];
+const frameworks = ["React JS", "Spring Boot", "JUnit", "Hibernate"];
+const concepts = ["DSA", "OOPS", "Cloud Computing"];
+const softSkills = ["Problem-Solving", "Communication", "Continuous Learning"];
+---
+<section id="skills">
+  <h2>Skills</h2>
+  <h3>Languages</h3>
+  <ul>{languages.map(skill => <li>{skill}</li>)}</ul>
+  <h3>Web Development</h3>
+  <ul>{webDev.map(skill => <li>{skill}</li>)}</ul>
+  <h3>Frameworks</h3>
+  <ul>{frameworks.map(skill => <li>{skill}</li>)}</ul>
+  <h3>Concepts</h3>
+  <ul>{concepts.map(skill => <li>{skill}</li>)}</ul>
+  <h3>Soft Skills</h3>
+  <ul>{softSkills.map(skill => <li>{skill}</li>)}</ul>
+</section>

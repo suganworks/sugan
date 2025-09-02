@@ -1,0 +1,24 @@
+---
+interface Props {
+  variant?: 'default' | 'small';
+}
+
+const { variant = 'default' } = Astro.props;
+---
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.documentElement.classList.add('loaded');
+}, false);
+</script>
+
+<h1 class={`logo ${variant === 'small' ? 'logo-small' : ''}`}>
+  <a href="/"><span class="hero-name">Suganthan</span></a>
+</h1>
+
+<style is:global>
+  .hero-name { position:relative; color:#fff; text-shadow:0 0 18px rgba(255,255,255,.08), 0 2px 4px rgba(0,0,0,.6); }
+  [data-theme='light'] .hero-name { color:#111; text-shadow:0 0 18px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.3); }
+  @keyframes heroHue { 0%{ background-position:0% 50%; } 50%{ background-position:100% 50%; } 100%{ background-position:0% 50%; } }
+  @media (prefers-reduced-motion:reduce){ .hero-name{ animation:none; background-size:100% 100%; } }
+</style>
