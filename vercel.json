@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "env": {
+    "SITE": "https://sugan-portfolio.vercel.app"
+  },
+  "outputDirectory": "dist",
+  "framework": "astro",
+  "github": { "enabled": true },
+  "cleanUrls": true,
+  "trailingSlash": false
+}

@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
-const title = `${post.data.title} | Suganthan`;
+const title = `${post.data.title} | Danny Garcia`;
 ---
 <BaseLayout title={title} description={post.data.description} headerVariant="small">
     <div class="blog-timeline">

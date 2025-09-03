@@ -1,11 +1,11 @@
 import { defineConfig } from 'astro/config';
 
+// Derive site URL dynamically so it works on Vercel preview / production and locally.
+// Vercel sets: VERCEL_URL (e.g. my-app.vercel.app) and on production you may set SITE env.
+const deploymentSite = process.env.SITE || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
+
 export default defineConfig({
-  // For a project GitHub Pages site hosted at https://suganworks.github.io/sugan/
-  // ensure the site value matches the final public URL so generated links & RSS are correct.
-  site: 'https://suganworks.github.io/sugan',
-  // Base path so asset URLs include /sugan when deployed under project pages
-  base: '/sugan',
+  site: deploymentSite,
   output: 'static',
   scopedStyleStrategy: 'class',
   vite: {

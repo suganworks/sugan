@@ -10,8 +10,8 @@ export async function GET(context) {
   );
   
   return rss({
-    title: 'Suganthan | Blog',
-    description: 'Suganthan, aspiring software engineer focusing on Java, Spring Boot, React, Node.js and scalable backend systems.',
+    title: 'Danny Garcia | Blog',
+    description: 'Danny Garcia, senior frontend engineer at Shopify. Building nice things for good people.',
     site: context.site,
     items: sortedPosts.map((post) => {
       const publishDate = post.data.publishDate;
