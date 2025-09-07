@@ -10,26 +10,26 @@ export interface Project {
 export const projects: Project[] = [
   {
     title: 'Mavericks Coding Platform',
-    desc: 'Coding practice platform with problem categorization, filters, leaderboard, secure auth & progress tracking.',
-    tech: ['React', 'Node.js', 'MongoDB', 'REST'],
-    repo: 'https://github.com/suganworks/mavericks-platform',
+    desc: 'Developed a platform for analytical skill-building, featuring a library of 50+ categorized problems with advanced filtering capabilities. Implemented secure user authentication and database integration using Supabase to efficiently manage user progress and problem data.',
+    tech: ['Vite', 'ReactJS', 'REST API', 'Tailwind CSS', 'Supabase'],
+    repo: 'https://github.com/suganworks/Mavericks',
     featured: true,
-    metrics: '+120 practice problems categorized; real-time ranking'
+    metrics: '50+ categorized problems · Secure authentication · Progress tracking'
   },
   {
-    title: 'NOVA Hospitality Robot',
-    desc: 'AI-powered service robot remotely controlled via web dashboard for maintenance & hygiene tasks.',
-    tech: ['Node.js', 'Realtime', 'Dashboard'],
-    repo: 'https://github.com/suganworks/nova-robot',
+    title: 'E-Commerce Website',
+    desc: 'Built a full-stack e-commerce platform from the ground up, managing over 100 unique product listings and processing customer orders. Engineered core functionalities including user authentication, shopping cart management, and full CRUD operations on the PostgreSQL database.',
+    tech: ['Angular', 'Spring Boot', 'Thymeleaf', 'PostgreSQL'],
+    repo: 'https://github.com/suganworks/ecom-website',
     featured: true,
-    metrics: 'Remote task dispatch & telemetry streaming'
+    metrics: '100+ product listings · Full CRUD operations · Order processing'
   },
   {
-    title: 'E‑Commerce Web App',
-    desc: 'Full-stack shopping platform: product listing, cart, auth, admin CRUD, order management.',
-    tech: ['Angular', 'Spring Boot', 'PostgreSQL'],
-  repo: 'https://github.com/suganworks/ecommerce-app',
-  featured: true,
-  metrics: 'JWT auth · role-based admin · order workflow'
+    title: '3D Viewer (Java Swing)',
+    desc: 'Applied complex mathematical concepts, including 3D matrix transformations and Z-buffering, to algorithmically render and visualize 3D models from scratch. Engineered interactive user controls for model rotation, zoom, and toggling between wireframe and solid modes.',
+    tech: ['Java', 'Swing', '3D Math', 'Z-buffering'],
+    repo: 'https://github.com/suganworks/3d-viewer',
+    featured: true,
+    metrics: '3D matrix transformations · Interactive controls · Wireframe/solid modes'
   }
 ];
